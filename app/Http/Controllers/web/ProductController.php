@@ -11,7 +11,9 @@ class ProductController extends Controller
 {
     public function home_page()
     { 
-        $data['product_type'] = DB::table('types')->get();
+        $data['products'] = DB::table('products')->get();
+        $data['brands'] = DB::table('brands')->get();
+
         return view('web.index', compact('data'));
     }
    
