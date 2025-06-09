@@ -10,5 +10,14 @@ Route::get('test', function () {
     Route::controller(ProductController::class)->group(function () {
 
         Route::get('/','home_page');
-        Route::get('details_page','details_page');
+        Route::get('more-products','more_product')->name('product.more');
+
+        // Route::get('details_page','details_page');
+        Route::get('product/show/{id}','details_page')->name('product.show');
+
+
+        Route::get('/category/{slug}', 'show')->name('category.products');  // details page 
+
+
+
     });

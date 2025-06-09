@@ -25,100 +25,94 @@
     <div class="container">
         <div class="product-details-top">
             <div class="row">
+
                 <div class="col-md-6">
                     <div class="product-gallery product-gallery-vertical">
                         <div class="row">
-                            <figure class="product-main-image">
-                                <img id="product-zoom" src="{{ asset('public/assets/images/products/single/1.jpg') }}"
-                                    data-zoom-image="{{ asset('public/assets/images/products/single/1-big.jpg') }}"
-                                    alt="product image">
+                           
+                            {{-- MAIN IMAGE --}}
+                                @php
+                                    $primaryImage = $product->images->firstWhere('is_primary', 1) ?? $product->images->first();
+                                @endphp
 
-                                <a href="#" id="btn-product-gallery" class="btn-product-gallery">
-                                    <i class="icon-arrows"></i>
-                                </a>
-                            </figure><!-- End .product-main-image -->
+                                @if ($primaryImage)
+                                <figure class="product-main-image">
+                                    <img id="product-zoom"
+                                        src="{{ asset('public/assets/images/products/' . $primaryImage->path) }}"
+                                        data-zoom-image="{{ asset('public/assets/images/products/' . $primaryImage->path) }}"
+                                        alt="Main product image">
 
-                            <div id="product-zoom-gallery" class="product-image-gallery">
-                                <a class="product-gallery-item active" href="#"
-                                    data-image="{{ asset('public/assets/images/products/single/1.jpg') }}"
-                                    data-zoom-image="{{ asset('public/assets/images/products/single/1-big.jpg') }}">
-                                    <img src="{{ asset('public/assets/images/products/single/1-small.jpg') }}"
-                                        alt="product side">
-                                </a>
+                                    <a href="#" id="btn-product-gallery" class="btn-product-gallery">
+                                        <i class="icon-arrows"></i>
+                                    </a>
+                                </figure>
+                                @endif
 
-                                <a class="product-gallery-item" href="#"
-                                    data-image="{{ asset('public/assets/images/products/single/2.jpg') }}"
-                                    data-zoom-image="{{ asset('public/assets/images/products/single/2-big.jpg') }}">
-                                    <img src="{{ asset('public/assets/images/products/single/2-small.jpg') }}"
-                                        alt="product cross">
-                                </a>
+                                {{-- GALLERY --}}
+                                <div id="product-zoom-gallery" class="product-image-gallery">
+                                    @foreach ($product->images as $image)
+                                        <a class="product-gallery-item {{ $loop->first ? 'active' : '' }}" href="#"
+                                        data-image="{{ asset('public/assets/images/products/' . $image->path) }}"
+                                        data-zoom-image="{{ asset('public/assets/images/products/' . $image->path) }}">
+                                            <img src="{{ asset('public/assets/images/products/' . $image->path) }}" alt="product image">
+                                        </a>
+                                    @endforeach
+                                </div>
 
-                                <a class="product-gallery-item" href="#"
-                                    data-image="{{ asset('public/assets/images/products/single/3.jpg') }}"
-                                    data-zoom-image="{{ asset('public/assets/images/products/single/3-big.jpg') }}">
-                                    <img src="{{ asset('public/assets/images/products/single/3-small.jpg') }}"
-                                        alt="product with model">
-                                </a>
-
-                                <a class="product-gallery-item" href="#"
-                                    data-image="{{ asset('public/assets/images/products/single/4.jpg') }}"
-                                    data-zoom-image="{{ asset('public/assets/images/products/single/4-big.jpg') }}">
-                                    <img src="{{ asset('public/assets/images/products/single/4-small.jpg') }}"
-                                        alt="product back">
-                                </a>
-                            </div><!-- End .product-image-gallery -->
                         </div><!-- End .row -->
                     </div><!-- End .product-gallery -->
                 </div><!-- End .col-md-6 -->
 
                 <div class="col-md-6">
                     <div class="product-details">
-                        <h1 class="product-title">Dark yellow lace cut out swing dress</h1><!-- End .product-title -->
+                        <h1 class="product-title">{{ $product->name }}</h1><!-- End .product-title -->
 
                         <div class="ratings-container">
                             <div class="ratings">
-                                <div class="ratings-val" style="width: 80%;"></div><!-- End .ratings-val -->
+                                <div class="ratings-val" style="width: {{ ($product->rating ?? 0) * 20 }}%;"></div><!-- End .ratings-val -->
                             </div><!-- End .ratings -->
-                            <a class="ratings-text" href="#product-review-link" id="review-link">( 2 Reviews )</a>
+                            <a class="ratings-text" href="#product-review-link" id="review-link">({{ $product->reviews_count ?? 0 }} Reviews)</a>
                         </div><!-- End .rating-container -->
 
+
                         <div class="product-price">
-                            $84.00
+                            ₹{{ number_format($product->price, 2) }}
                         </div><!-- End .product-price -->
 
                         <div class="product-content">
-                            <p>Sed egestas, ante et vulputate volutpat, eros pede semper est, vitae luctus metus libero
-                                eu augue. Morbi purus libero, faucibus adipiscing. Sed lectus. </p>
+                            <p>{{ $product->description }}</p>
                         </div><!-- End .product-content -->
 
+                        {{-- Color Dropdown --}}
+                        @if(isset($attributeGroups['Color']))
                         <div class="details-filter-row details-row-size">
-                            <label>Color:</label>
+                            <label for="color">Color:</label>
+                            <div class="select-custom">
+                                <select name="color" id="color" class="form-control">
+                                    <option value="" selected disabled>Select a Color</option>
+                                    @foreach($attributeGroups['Color'] as $color)
+                                        <option value="{{ strtolower($color) }}">{{ ucfirst($color) }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        @endif
 
-                            <div class="product-nav product-nav-thumbs">
-                                <a href="#" class="active">
-                                    <img src="{{ asset('public/assets/images/products/single/1-thumb.jpg') }}" alt="product desc">
-                                </a>
-                                <a href="#">
-                                    <img src="{{ asset('public/assets/images/products/single/2-thumb.jpg') }}" alt="product desc">
-                                </a>
-                            </div><!-- End .product-nav -->
-                        </div><!-- End .details-filter-row -->
-
+                        {{-- Size Dropdown --}}
+                        @if(isset($attributeGroups['Size']))
                         <div class="details-filter-row details-row-size">
                             <label for="size">Size:</label>
                             <div class="select-custom">
                                 <select name="size" id="size" class="form-control">
-                                    <option value="#" selected="selected">Select a size</option>
-                                    <option value="s">Small</option>
-                                    <option value="m">Medium</option>
-                                    <option value="l">Large</option>
-                                    <option value="xl">Extra Large</option>
+                                    <option value="" selected disabled>Select a Size</option>
+                                    @foreach($attributeGroups['Size'] as $size)
+                                        <option value="{{ strtolower($size) }}">{{ strtoupper($size) }}</option>
+                                    @endforeach
                                 </select>
-                            </div><!-- End .select-custom -->
-
-                            <a href="#" class="size-guide"><i class="icon-th-list"></i>size guide</a>
-                        </div><!-- End .details-filter-row -->
-
+                            </div>
+                        </div>
+                        @endif
+                        
                         <div class="details-filter-row details-row-size">
                             <label for="qty">Qty:</label>
                             <div class="product-details-quantity">
@@ -133,18 +127,20 @@
                             <div class="details-action-wrapper">
                                 <a href="#" class="btn-product btn-wishlist" title="Wishlist"><span>Add to
                                         Wishlist</span></a>
-                                <a href="#" class="btn-product btn-compare" title="Compare"><span>Add to
-                                        Compare</span></a>
+                                <!-- <a href="#" class="btn-product btn-compare" title="Compare"><span>Add to
+                                        Compare</span></a> -->
                             </div><!-- End .details-action-wrapper -->
                         </div><!-- End .product-details-action -->
 
                         <div class="product-details-footer">
+                          
                             <div class="product-cat">
                                 <span>Category:</span>
-                                <a href="#">Women</a>,
-                                <a href="#">Dresses</a>,
-                                <a href="#">Yellow</a>
-                            </div><!-- End .product-cat -->
+                                <a href="{{ route('category.products', $product->category->slug) }}">
+                                    {{ $product->category->name }}
+                                </a>
+                            </div>
+
 
                             <div class="social-icons social-icons-sm">
                                 <span class="social-label">Share:</span>
@@ -181,143 +177,65 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" id="product-review-link" data-toggle="tab" href="#product-review-tab" role="tab"
-                        aria-controls="product-review-tab" aria-selected="false">Reviews (2)</a>
+                        aria-controls="product-review-tab" aria-selected="false">Reviews ({{ $product->reviews->count() }})</a>
                 </li>
             </ul>
             <div class="tab-content">
                 <div class="tab-pane fade show active" id="product-desc-tab" role="tabpanel"
                     aria-labelledby="product-desc-link">
                     <div class="product-desc-content">
-                        <h3>Product Information</h3>
-                        <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec odio. Quisque
-                            volutpat mattis eros. Nullam malesuada erat ut turpis. Suspendisse urna viverra
-                            non,
-                            semper suscipit, posuere a, pede. Donec nec justo eget felis facilisis
-                            fermentum.
-                            Aliquam porttitor mauris sit amet orci. Aenean dignissim pellentesque felis.
-                            Phasellus ultrices nulla quis nibh. Quisque a lectus. Donec consectetuer ligula
-                            vulputate sem tristique cursus. </p>
-                        <ul>
-                            <li>Nunc nec porttitor turpis. In eu risus enim. In vitae mollis elit. </li>
-                            <li>Vivamus finibus vel mauris ut vehicula.</li>
-                            <li>Nullam a magna porttitor, dictum risus nec, faucibus sapien.</li>
-                        </ul>
-
-                        <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec odio. Quisque
-                            volutpat mattis eros. Nullam malesuada erat ut turpis. Suspendisse urna viverra
-                            non,
-                            semper suscipit, posuere a, pede. Donec nec justo eget felis facilisis
-                            fermentum.
-                            Aliquam porttitor mauris sit amet orci. Aenean dignissim pellentesque felis.
-                            Phasellus ultrices nulla quis nibh. Quisque a lectus. Donec consectetuer ligula
-                            vulputate sem tristique cursus. </p>
+                        {!! $product->long_desc !!}
                     </div><!-- End .product-desc-content -->
                 </div><!-- .End .tab-pane -->
                 <div class="tab-pane fade" id="product-info-tab" role="tabpanel" aria-labelledby="product-info-link">
                     <div class="product-desc-content">
-                        <h3>Information</h3>
-                        <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec odio. Quisque
-                            volutpat mattis eros. Nullam malesuada erat ut turpis. Suspendisse urna viverra
-                            non,
-                            semper suscipit, posuere a, pede. Donec nec justo eget felis facilisis
-                            fermentum.
-                            Aliquam porttitor mauris sit amet orci. </p>
-
-                        <h3>Fabric & care</h3>
-                        <ul>
-                            <li>Faux suede fabric</li>
-                            <li>Gold tone metal hoop handles.</li>
-                            <li>RI branding</li>
-                            <li>Snake print trim interior </li>
-                            <li>Adjustable cross body strap</li>
-                            <li> Height: 31cm; Width: 32cm; Depth: 12cm; Handle Drop: 61cm</li>
-                        </ul>
-
-                        <h3>Size</h3>
-                        <p>one size</p>
+                        <p>{!! $product->additional_info !!}</p>
                     </div><!-- End .product-desc-content -->
                 </div><!-- .End .tab-pane -->
                 <div class="tab-pane fade" id="product-shipping-tab" role="tabpanel"
                     aria-labelledby="product-shipping-link">
                     <div class="product-desc-content">
-                        <h3>Delivery & returns</h3>
-                        <p>We deliver to over 100 countries around the world. For full details of the
-                            delivery
-                            options we offer, please view our <a href="#">Delivery information</a><br>
-                            We hope you'll love every purchase, but if you ever need to return an item you
-                            can
-                            do so within a month of receipt. For full details of how to make a return,
-                            please
-                            view our <a href="#">Returns information</a></p>
+                        {!! $product->shipping_info !!}
                     </div><!-- End .product-desc-content -->
                 </div><!-- .End .tab-pane -->
-                <div class="tab-pane fade" id="product-review-tab" role="tabpanel"
-                    aria-labelledby="product-review-link">
-                    <div class="reviews">
-                        <h3>Reviews (2)</h3>
+
+
+             <div class="tab-pane fade" id="product-review-tab" role="tabpanel"
+                aria-labelledby="product-review-link">
+                <div class="reviews">
+                    <h3>Reviews ({{ $product->reviews->count() }})</h3>
+
+                    @forelse ($product->reviews as $review)
                         <div class="review">
                             <div class="row no-gutters">
                                 <div class="col-auto">
-                                    <h4><a href="#">Samanta J.</a></h4>
+                                    <h4><a href="#">{{ $review->user->name ?? 'Anonymous' }}</a></h4>
                                     <div class="ratings-container">
                                         <div class="ratings">
-                                            <div class="ratings-val" style="width: 80%;"></div>
-                                            <!-- End .ratings-val -->
-                                        </div><!-- End .ratings -->
-                                    </div><!-- End .rating-container -->
-                                    <span class="review-date">6 days ago</span>
-                                </div><!-- End .col -->
+                                            <div class="ratings-val" style="width: {{ $review->rating * 20 }}%;"></div>
+                                        </div>
+                                    </div>
+                                    <span class="review-date">{{ $review->created_at->diffForHumans() }}</span>
+                                </div>
                                 <div class="col">
-                                    <h4>Good, perfect size</h4>
-
+                                    <h4>{{ $review->review_title ?? 'No Title' }}</h4>
                                     <div class="review-content">
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ducimus
-                                            cum
-                                            dolores assumenda asperiores facilis porro reprehenderit animi
-                                            culpa
-                                            atque blanditiis commodi perspiciatis doloremque, possimus,
-                                            explicabo, autem fugit beatae quae voluptas!</p>
-                                    </div><!-- End .review-content -->
-
-                                    <div class="review-action">
-                                        <a href="#"><i class="icon-thumbs-up"></i>Helpful (2)</a>
-                                        <a href="#"><i class="icon-thumbs-down"></i>Unhelpful (0)</a>
-                                    </div><!-- End .review-action -->
-                                </div><!-- End .col-auto -->
-                            </div><!-- End .row -->
-                        </div><!-- End .review -->
-
-                        <div class="review">
-                            <div class="row no-gutters">
-                                <div class="col-auto">
-                                    <h4><a href="#">John Doe</a></h4>
-                                    <div class="ratings-container">
-                                        <div class="ratings">
-                                            <div class="ratings-val" style="width: 100%;"></div>
-                                            <!-- End .ratings-val -->
-                                        </div><!-- End .ratings -->
-                                    </div><!-- End .rating-container -->
-                                    <span class="review-date">5 days ago</span>
-                                </div><!-- End .col -->
-                                <div class="col">
-                                    <h4>Very good</h4>
-
-                                    <div class="review-content">
-                                        <p>Sed, molestias, tempore? Ex dolor esse iure hic veniam laborum
-                                            blanditiis laudantium iste amet. Cum non voluptate eos enim, ab
-                                            cumque nam, modi, quas iure illum repellendus, blanditiis
-                                            perspiciatis beatae!</p>
-                                    </div><!-- End .review-content -->
-
-                                    <div class="review-action">
+                                        <p>{{ $review->comment }}</p>
+                                    </div>
+                                    <!-- <div class="review-action">
                                         <a href="#"><i class="icon-thumbs-up"></i>Helpful (0)</a>
                                         <a href="#"><i class="icon-thumbs-down"></i>Unhelpful (0)</a>
-                                    </div><!-- End .review-action -->
-                                </div><!-- End .col-auto -->
-                            </div><!-- End .row -->
-                        </div><!-- End .review -->
-                    </div><!-- End .reviews -->
-                </div><!-- .End .tab-pane -->
+                                    </div> -->
+                                </div>
+                            </div>
+                        </div>
+                    @empty
+                        <p>No reviews yet.</p>
+                    @endforelse
+                </div>
+            </div>
+            <!-- .End .tab-pane -->
+ 
             </div><!-- End .tab-content -->
         </div><!-- End .product-details-tab -->
 
@@ -325,258 +243,60 @@
 
         <div class="owl-carousel owl-simple carousel-equal-height carousel-with-shadow" data-toggle="owl"
             data-owl-options='{
-                    "nav": false, 
-                    "dots": true,
-                    "margin": 20,
-                    "loop": false,
-                    "responsive": {
-                        "0": {
-                            "items":1
-                        },
-                        "480": {
-                            "items":2
-                        },
-                        "768": {
-                            "items":3
-                        },
-                        "992": {
-                            "items":4
-                        },
-                        "1200": {
-                            "items":4,
-                            "nav": true,
-                            "dots": false
-                        }
-                    }
-                }'>
+                "nav": false, 
+                "dots": true,
+                "margin": 20,
+                "loop": false,
+                "responsive": {
+                    "0": { "items":1 },
+                    "480": { "items":2 },
+                    "768": { "items":3 },
+                    "992": { "items":4 },
+                    "1200": { "items":4, "nav": true, "dots": false }
+                }
+            }'>
 
+            @foreach($relatedProducts as $related)
             <div class="product product-7 text-center">
                 <figure class="product-media">
-                    <span class="product-label label-new">New</span>
-                    <a href="product.html">
-                        <img src="{{ asset('public/assets/images/products/product-4.jpg') }}" alt="Product image"
-                            class="product-image">
+                    <a href="{{ route('product.show', $related->id) }}">
+                        <img src="{{ asset('public/assets/images/demos/demo-2/products/' . $related->firstImage->path) }}" alt="Product image"
+                            class="product-image">                          
                     </a>
 
                     <div class="product-action-vertical">
-                        <a href="#" class="btn-product-icon btn-wishlist btn-expandable"><span>add to
-                                wishlist</span></a>
-                        <a href="popup/quickView.html" class="btn-product-icon btn-quickview"
-                            title="Quick view"><span>Quick view</span></a>
+                        <a href="#" class="btn-product-icon btn-wishlist btn-expandable"><span>add to wishlist</span></a>
+                        <a href="#" class="btn-product-icon btn-quickview" title="Quick view"><span>Quick view</span></a>
                         <a href="#" class="btn-product-icon btn-compare" title="Compare"><span>Compare</span></a>
-                    </div><!-- End .product-action-vertical -->
+                    </div>
 
                     <div class="product-action">
                         <a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
-                    </div><!-- End .product-action -->
-                </figure><!-- End .product-media -->
+                    </div>
+                </figure>
 
                 <div class="product-body">
                     <div class="product-cat">
-                        <a href="#">Women</a>
-                    </div><!-- End .product-cat -->
-                    <h3 class="product-title"><a href="product.html">Brown paperbag waist <br>pencil
-                            skirt</a>
-                    </h3><!-- End .product-title -->
-                    <div class="product-price">
-                        $60.00
-                    </div><!-- End .product-price -->
-                    <div class="ratings-container">
-                        <div class="ratings">
-                            <div class="ratings-val" style="width: 20%;"></div><!-- End .ratings-val -->
-                        </div><!-- End .ratings -->
-                        <span class="ratings-text">( 2 Reviews )</span>
-                    </div><!-- End .rating-container -->
-
-                    <div class="product-nav product-nav-thumbs">
-                        <a href="#" class="active">
-                            <img src="{{ asset('public/assets/images/products/product-4-thumb.jpg') }}"
-                                alt="product desc">
-                        </a>
-                        <a href="#">
-                            <img src="{{ asset('public/assets/images/products/product-4-2-thumb.jpg') }}"
-                                alt="product desc">
-                        </a>
-                        <a href="#">
-                            <img src="{{ asset('public/assets/images/products/product-4-3-thumb.jpg') }}"
-                                alt="product desc">
-                        </a>
-                    </div><!-- End .product-nav -->
-                </div><!-- End .product-body -->
-            </div><!-- End .product -->
-
-            <div class="product product-7 text-center">
-                <figure class="product-media">
-                    <span class="product-label label-out">Out of Stock</span>
-                    <a href="product.html">
-                        <img src="{{ asset('public/assets/images/products/product-6.jpg') }}" alt="Product image"
-                            class="product-image">
-                    </a>
-
-                    <div class="product-action-vertical">
-                        <a href="#" class="btn-product-icon btn-wishlist btn-expandable"><span>add to
-                                wishlist</span></a>
-                        <a href="popup/quickView.html" class="btn-product-icon btn-quickview"
-                            title="Quick view"><span>Quick view</span></a>
-                        <a href="#" class="btn-product-icon btn-compare" title="Compare"><span>Compare</span></a>
-                    </div><!-- End .product-action-vertical -->
-
-                    <div class="product-action">
-                        <a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
-                    </div><!-- End .product-action -->
-                </figure><!-- End .product-media -->
-
-                <div class="product-body">
-                    <div class="product-cat">
-                        <a href="#">Jackets</a>
-                    </div><!-- End .product-cat -->
-                    <h3 class="product-title"><a href="product.html">Khaki utility boiler jumpsuit</a></h3>
-                    <!-- End .product-title -->
-                    <div class="product-price">
-                        <span class="out-price">$120.00</span>
-                    </div><!-- End .product-price -->
-                    <div class="ratings-container">
-                        <div class="ratings">
-                            <div class="ratings-val" style="width: 80%;"></div><!-- End .ratings-val -->
-                        </div><!-- End .ratings -->
-                        <span class="ratings-text">( 6 Reviews )</span>
-                    </div><!-- End .rating-container -->
-                </div><!-- End .product-body -->
-            </div><!-- End .product -->
-
-            <div class="product product-7 text-center">
-                <figure class="product-media">
-                    <span class="product-label label-top">Top</span>
-                    <a href="product.html">
-                        <img src="{{ asset('public/assets/images/products/product-11.jpg') }}" alt="Product image"
-                            class="product-image">
-                    </a>
-
-                    <div class="product-action-vertical">
-                        <a href="#" class="btn-product-icon btn-wishlist btn-expandable"><span>add to
-                                wishlist</span></a>
-                        <a href="popup/quickView.html" class="btn-product-icon btn-quickview"
-                            title="Quick view"><span>Quick view</span></a>
-                        <a href="#" class="btn-product-icon btn-compare" title="Compare"><span>Compare</span></a>
-                    </div><!-- End .product-action-vertical -->
-
-                    <div class="product-action">
-                        <a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
-                    </div><!-- End .product-action -->
-                </figure><!-- End .product-media -->
-
-                <div class="product-body">
-                    <div class="product-cat">
-                        <a href="#">Shoes</a>
-                    </div><!-- End .product-cat -->
-                    <h3 class="product-title"><a href="product.html">Light brown studded Wide fit wedges</a>
-                    </h3><!-- End .product-title -->
-                    <div class="product-price">
-                        $110.00
-                    </div><!-- End .product-price -->
-                    <div class="ratings-container">
-                        <div class="ratings">
-                            <div class="ratings-val" style="width: 80%;"></div><!-- End .ratings-val -->
-                        </div><!-- End .ratings -->
-                        <span class="ratings-text">( 1 Reviews )</span>
-                    </div><!-- End .rating-container -->
-
-                    <div class="product-nav product-nav-thumbs">
-                        <a href="#" class="active">
-                            <img src="{{ asset('public/assets/images/products/product-11-thumb.jpg') }}"
-                                alt="product desc">
-                        </a>
-                        <a href="#">
-                            <img src="{{ asset('public/assets/images/products/product-11-2-thumb.jpg') }}"
-                                alt="product desc">
-                        </a>
-
-                        <a href="#">
-                            <img src="{{ asset('public/assets/images/products/product-11-3-thumb.jpg') }}"
-                                alt="product desc">
-                        </a>
-                    </div><!-- End .product-nav -->
-                </div><!-- End .product-body -->
-            </div><!-- End .product -->
-
-            <div class="product product-7 text-center">
-                <figure class="product-media">
-                    <a href="product.html">
-                        <img src="{{ asset('public/assets/images/products/product-10.jpg') }}" alt="Product image"
-                            class="product-image">
-                    </a>
-
-                    <div class="product-action-vertical">
-                        <a href="#" class="btn-product-icon btn-wishlist btn-expandable"><span>add to
-                                wishlist</span></a>
-                        <a href="popup/quickView.html" class="btn-product-icon btn-quickview"
-                            title="Quick view"><span>Quick view</span></a>
-                        <a href="#" class="btn-product-icon btn-compare" title="Compare"><span>Compare</span></a>
-                    </div><!-- End .product-action-vertical -->
-
-                    <div class="product-action">
-                        <a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
-                    </div><!-- End .product-action -->
-                </figure><!-- End .product-media -->
-
-                <div class="product-body">
-                    <div class="product-cat">
-                        <a href="#">Jumpers</a>
-                    </div><!-- End .product-cat -->
-                    <h3 class="product-title"><a href="product.html">Yellow button front tea top</a></h3>
-                    <!-- End .product-title -->
-                    <div class="product-price">
-                        $56.00
-                    </div><!-- End .product-price -->
-                    <div class="ratings-container">
-                        <div class="ratings">
-                            <div class="ratings-val" style="width: 0%;"></div><!-- End .ratings-val -->
-                        </div><!-- End .ratings -->
-                        <span class="ratings-text">( 0 Reviews )</span>
-                    </div><!-- End .rating-container -->
-                </div><!-- End .product-body -->
-            </div><!-- End .product -->
-
-            <div class="product product-7 text-center">
-                <figure class="product-media">
-                    <a href="product.html">
-                        <img src="{{ asset('public/assets/images/products/product-7.jpg') }}" alt="Product image"
-                            class="product-image">
-                    </a>
-
-                    <div class="product-action-vertical">
-                        <a href="#" class="btn-product-icon btn-wishlist btn-expandable"><span>add to
-                                wishlist</span></a>
-                        <a href="popup/quickView.html" class="btn-product-icon btn-quickview"
-                            title="Quick view"><span>Quick view</span></a>
-                        <a href="#" class="btn-product-icon btn-compare" title="Compare"><span>Compare</span></a>
-                    </div><!-- End .product-action-vertical -->
-
-                    <div class="product-action">
-                        <a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
-                    </div><!-- End .product-action -->
-                </figure><!-- End .product-media -->
-
-                <div class="product-body">
-                    <div class="product-cat">
-                        <a href="#">Jeans</a>
-                    </div><!-- End .product-cat -->
-                    <h3 class="product-title"><a href="product.html">Blue utility pinafore denim dress</a>
+                        <a href="#">{{ $related->category->name ?? 'Category' }}</a>
+                    </div>
+                    <h3 class="product-title">
+                        <a href="{{ route('product.show', $related->id) }}">{{ $related->name }}</a>
                     </h3>
-                    <!-- End .product-title -->
                     <div class="product-price">
-                        $76.00
-                    </div><!-- End .product-price -->
+                        ₹{{ number_format($related->price, 2) }}
+                    </div>
                     <div class="ratings-container">
                         <div class="ratings">
-                            <div class="ratings-val" style="width: 20%;"></div><!-- End .ratings-val -->
-                        </div><!-- End .ratings -->
-                        <span class="ratings-text">( 2 Reviews )</span>
-                    </div><!-- End .rating-container -->
-                </div><!-- End .product-body -->
+                            <div class="ratings-val" style="width: {{ ($related->rating ?? 0) * 20 }}%;"></div>
+                        </div>
+                        <span class="ratings-text">({{ $related->reviews_count ?? 0 }} Reviews)</span>
+                    </div>
+                </div>
+            </div>
+            @endforeach
 
-            </div><!-- End .product -->
-        </div><!-- End .owl-carousel -->
+        </div>
+
     </div><!-- End .container -->
 </div><!-- End .page-content -->
 

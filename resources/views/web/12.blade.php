@@ -178,29 +178,87 @@
         <div class="tab-pane fade show active" id="top-all-tab" role="tabpanel" aria-labelledby="top-all-link">
             <div class="row justify-content-center">
                 @foreach ($data['all_products'] as $product)
-                @include('web.partials.product-card', ['product' => $product])
+                    @include('web.partials.product-card', ['product' => $product])
                 @endforeach
             </div>
         </div>
 
         <!-- Category Specific Tabs -->
         @foreach ($data['categories'] as $category)
-        <div class="tab-pane fade" id="top-{{ $category->id }}-tab" role="tabpanel"aria-labelledby="top-{{ $category->id }}-link">
-            <div class="row justify-content-center">
-                @foreach ($category->products as $product)
-                    @include('web.partials.product-card', ['product' => $product])
-                @endforeach
+            <div class="tab-pane fade" id="top-{{ $category->id }}-tab" role="tabpanel" aria-labelledby="top-{{ $category->id }}-link">
+                <div class="row justify-content-center">
+                    @foreach ($category->products as $product)
+                        @include('web.partials.product-card', ['product' => $product])
+                    @endforeach
+                </div>
             </div>
-        </div>
         @endforeach
+
+        @foreach ($data['categories'] as $category)
+            <div class="tab-pane fade" id="top-{{ $category->id }}-tab" role="tabpanel"
+                aria-labelledby="top-{{ $category->id }}-link" data-category="{{ $category->id }}">
+                <div class="product-list-container"></div>
+            </div>
+        @endforeach
+
+
+        
     </div>
     <!-- .End .tab-pane -->
 
+    @if ($data['all_products']->hasPages())
+        <nav aria-label="Page navigation">
+            <ul class="pagination">
+
+                {{-- Prev Button --}}
+                @if ($data['all_products']->onFirstPage())
+                    <li class="page-item disabled">
+                        <a class="page-link page-link-prev" href="#" tabindex="-1" aria-disabled="true">
+                            <span aria-hidden="true"><i class="icon-long-arrow-left"></i></span>Prev
+                        </a>
+                    </li>
+                @else
+                    <li class="page-item">
+                        <a class="page-link page-link-prev" href="{{ $data['all_products']->previousPageUrl() }}" aria-label="Previous">
+                            <span aria-hidden="true"><i class="icon-long-arrow-left"></i></span>Prev
+                        </a>
+                    </li>
+                @endif
+
+                {{-- Page Numbers --}}
+                @foreach ($data['all_products']->getUrlRange(1, $data['all_products']->lastPage()) as $page => $url)
+                    <li class="page-item {{ $data['all_products']->currentPage() == $page ? 'active' : '' }}">
+                        <a class="page-link" href="{{ $url }}">{{ $page }}</a>
+                    </li>
+                @endforeach
+
+                {{-- Page Total --}}
+                <li class="page-item-total">of {{ $data['all_products']->lastPage() }}</li>
+
+                {{-- Next Button --}}
+                @if ($data['all_products']->hasMorePages())
+                    <li class="page-item">
+                        <a class="page-link page-link-next" href="{{ $data['all_products']->nextPageUrl() }}" aria-label="Next">
+                            Next <span aria-hidden="true"><i class="icon-long-arrow-right"></i></span>
+                        </a>
+                    </li>
+                @else
+                    <li class="page-item disabled">
+                        <a class="page-link page-link-next" href="#" aria-disabled="true">
+                            Next <span aria-hidden="true"><i class="icon-long-arrow-right"></i></span>
+                        </a>
+                    </li>
+                @endif
+
+            </ul>
+        </nav>
+    @endif
+
 </div><!-- End .tab-content -->
 
-<div class="more-container text-center">
-    <a href="{{ route('product.more') }}" class="btn btn-outline-darker btn-more"><span>Load more products</span><i class="icon-long-arrow-down"></i></a>
-</div><!-- End .more-container -->
+<!-- <div class="more-container text-center">
+    <a href="#" class="btn btn-outline-darker btn-more"><span>Load more products</span><i class="icon-long-arrow-down"></i></a>
+</div>End .more-container -->
 
 <div class="container">
     <hr>
@@ -370,4 +428,32 @@
 
 @endsection
 @section('javascript')
+<script src="{{ asset('public/assets/js/jquery.min.js') }}"></script>
+<script>
+    $(document).ready(function () {
+        $('.nav-link').on('click', function (e) {
+            e.preventDefault();
+
+            const categoryId = $(this).attr('id').split('-')[1];
+            const tabSelector = '#top-' + categoryId + '-tab';
+
+            loadCategoryProducts(categoryId, tabSelector);
+        });
+
+        // Load category products with pagination
+        function loadCategoryProducts(categoryId, tabSelector, page = 1) {
+            $.get('/category-products/' + categoryId + '?page=' + page, function (data) {
+                $(tabSelector + ' .product-list-container').html(data);
+
+                // Re-bind click event after loading new pagination
+                $(tabSelector + ' .pagination a').on('click', function (e) {
+                    e.preventDefault();
+                    const pageUrl = $(this).attr('href');
+                    const newPage = new URL(pageUrl).searchParams.get("page");
+                    loadCategoryProducts(categoryId, tabSelector, newPage);
+                });
+            });
+        }
+    });
+</script>
 @endsection

@@ -130,6 +130,14 @@ return new class extends Migration
             $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending');
             $table->timestamps();
         });
+
+        Schema::create('related_products', function (Blueprint $table) {
+            $table->unsignedBigInteger('product_id');
+            $table->unsignedBigInteger('related_product_id');
+            $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
+            $table->foreign('related_product_id')->references('id')->on('products')->onDelete('cascade');
+        });
+
     }
 
     public function down(): void
@@ -147,6 +155,7 @@ return new class extends Migration
         Schema::dropIfExists('addresses');
         Schema::dropIfExists('admins');
         Schema::dropIfExists('users');
+        Schema::dropIfExists('related_products');
     }
    
 

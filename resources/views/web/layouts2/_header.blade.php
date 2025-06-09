@@ -286,7 +286,7 @@
                                         <div class="col-md-4">
                                             <div class="banner banner-overlay">
                                                 <a href="category.html" class="banner banner-menu">
-                                                    <img src="{{ asset('public/assets/images/menu/banner-1.jpg" alt="Banner">
+                                                    <img src="{{ asset('public/assets/images/menu/banner-1.jpg') }}" alt="Banner">
 
                                                     <div class="banner-content banner-content-top">
                                                         <div class="banner-title text-white">Last <br>Chance<br><span><strong>Sale</strong></span></div><!-- End .banner-title -->
@@ -321,7 +321,7 @@
                                         <div class="col-md-6">
                                             <div class="banner banner-overlay">
                                                 <a href="category.html">
-                                                    <img src="{{ asset('public/assets/images/menu/banner-2.jpg" alt="Banner">
+                                                    <img src="{{ asset('public/assets/images/menu/banner-2.jpg') }}" alt="Banner">
 
                                                     <div class="banner-content banner-content-bottom">
                                                         <div class="banner-title text-white">New Trends<br><span><strong>spring 2019</strong></span></div><!-- End .banner-title -->
@@ -479,7 +479,7 @@
 
                                     <figure class="product-image-container">
                                         <a href="product.html" class="product-image">
-                                            <img src="{{ asset('public/assets/images/products/cart/product-1.jpg" alt="product">
+                                            <img src="{{ asset('public/assets/images/products/cart/product-1.jpg') }}" alt="product">
                                         </a>
                                     </figure>
                                     <a href="#" class="btn-remove" title="Remove Product"><i class="icon-close"></i></a>
@@ -499,7 +499,7 @@
 
                                     <figure class="product-image-container">
                                         <a href="product.html" class="product-image">
-                                            <img src="{{ asset('public/assets/images/products/cart/product-2.jpg" alt="product">
+                                            <img src="{{ asset('public/assets/images/products/cart/product-2.jpg') }}" alt="product">
                                         </a>
                                     </figure>
                                     <a href="#" class="btn-remove" title="Remove Product"><i class="icon-close"></i></a>
