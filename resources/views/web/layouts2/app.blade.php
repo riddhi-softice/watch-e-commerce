@@ -49,6 +49,10 @@
     @include('web.layouts2._mobile-menu')
     <!-- ======= End Mobile Menu  ======= -->
 
+    <!-- ======= Mobile Menu  ======= -->
+    @include('web.layouts2.signin-modal')
+    <!-- ======= End Mobile Menu  ======= -->
+
     @yield('javascript')
 
     <!-- Vendor JS Files -->

@@ -45,7 +45,6 @@ class ProductController extends Controller
 
         // dd($relatedProducts[0]->firstImage->path,$relatedProducts);
 
-
         $attributeGroups = [];
         foreach ($product->attributeValues as $attVal) {
             $attributeGroups[$attVal->attribute->name][] = $attVal->value;

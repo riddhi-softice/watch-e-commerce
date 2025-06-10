@@ -34,6 +34,7 @@ return new class extends Migration
             $table->string('state')->nullable();
             $table->string('postal_code')->nullable();
             $table->string('country')->nullable();
+            $table->string('address_type')->nullable();  // home, billing, shipping, ofc ..etc
             $table->timestamps();
         });
 
@@ -138,6 +139,17 @@ return new class extends Migration
             $table->foreign('related_product_id')->references('id')->on('products')->onDelete('cascade');
         });
 
+        Schema::create('cart_items', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('product_id');
+            $table->integer('quantity')->default(1);
+            $table->timestamps();
+
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
+        });
+
     }
 
     public function down(): void
@@ -156,6 +168,7 @@ return new class extends Migration
         Schema::dropIfExists('admins');
         Schema::dropIfExists('users');
         Schema::dropIfExists('related_products');
+        Schema::dropIfExists('cart_items');
     }
    
 

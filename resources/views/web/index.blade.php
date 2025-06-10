@@ -83,6 +83,7 @@
             <div class="col-lg-4">
                 <div class="intro-banners">
                     <div class="row row-sm">
+                        
                         <div class="col-md-6 col-lg-12">
                             <div class="banner banner-display">
                                 <a href="#">
@@ -118,6 +119,7 @@
                                 </div><!-- End .banner-content -->
                             </div><!-- End .banner -->
                         </div><!-- End .col-md-6 col-lg-12 -->
+
                     </div><!-- End .row row-sm -->
                 </div><!-- End .intro-banners -->
             </div><!-- End .col-lg-4 -->
@@ -178,7 +180,7 @@
         <div class="tab-pane fade show active" id="top-all-tab" role="tabpanel" aria-labelledby="top-all-link">
             <div class="row justify-content-center">
                 @foreach ($data['all_products'] as $product)
-                @include('web.partials.product-card', ['product' => $product])
+                    @include('web.partials.product-card', ['product' => $product])
                 @endforeach
             </div>
         </div>

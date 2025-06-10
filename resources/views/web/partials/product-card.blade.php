@@ -23,7 +23,7 @@
             <div class="product-price">${{ $product->price }}</div>
         </div>
         <div class="product-action">
-            <a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
+            <a href="{{ route('cart.add', $product->id) }}" class="btn-product btn-cart"><span>add to cart</span></a>
         </div>
     </div>
 </div>

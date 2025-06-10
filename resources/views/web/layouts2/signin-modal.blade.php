@@ -21,19 +21,17 @@
                             </li>
                         </ul>
                         <div class="tab-content" id="tab-content-5">
-                            <div class="tab-pane fade show active" id="signin" role="tabpanel"
-                                aria-labelledby="signin-tab">
-                                <form action="#">
+                            <div class="tab-pane fade show active" id="signin" role="tabpanel" aria-labelledby="signin-tab">
+                                <form action="{{ route('login') }}" method="POST">
+                                    @csrf
                                     <div class="form-group">
                                         <label for="singin-email">Username or email address *</label>
-                                        <input type="text" class="form-control" id="singin-email" name="singin-email"
-                                            required>
+                                        <input type="text" class="form-control" id="singin-email" name="email" required>
                                     </div><!-- End .form-group -->
 
                                     <div class="form-group">
                                         <label for="singin-password">Password *</label>
-                                        <input type="password" class="form-control" id="singin-password"
-                                            name="singin-password" required>
+                                        <input type="password" class="form-control" id="singin-password" name="password" required>
                                     </div><!-- End .form-group -->
 
                                     <div class="form-footer">
@@ -51,36 +49,21 @@
                                         <a href="#" class="forgot-link">Forgot Your Password?</a>
                                     </div><!-- End .form-footer -->
                                 </form>
-                                <div class="form-choice">
-                                    <p class="text-center">or sign in with</p>
-                                    <div class="row">
-                                        <div class="col-sm-6">
-                                            <a href="#" class="btn btn-login btn-g">
-                                                <i class="icon-google"></i>
-                                                Login With Google
-                                            </a>
-                                        </div><!-- End .col-6 -->
-                                        <div class="col-sm-6">
-                                            <a href="#" class="btn btn-login btn-f">
-                                                <i class="icon-facebook-f"></i>
-                                                Login With Facebook
-                                            </a>
-                                        </div><!-- End .col-6 -->
-                                    </div><!-- End .row -->
-                                </div><!-- End .form-choice -->
+                              
                             </div><!-- .End .tab-pane -->
                             <div class="tab-pane fade" id="register" role="tabpanel" aria-labelledby="register-tab">
-                                <form action="#">
+                                <form action="{{ route('user.register') }}" method="POST">
+                                    @csrf
                                     <div class="form-group">
                                         <label for="register-email">Your email address *</label>
                                         <input type="email" class="form-control" id="register-email"
-                                            name="register-email" required>
+                                            name="email" required>
                                     </div><!-- End .form-group -->
 
                                     <div class="form-group">
                                         <label for="register-password">Password *</label>
                                         <input type="password" class="form-control" id="register-password"
-                                            name="register-password" required>
+                                            name="password" required>
                                     </div><!-- End .form-group -->
 
                                     <div class="form-footer">
@@ -97,23 +80,7 @@
                                         </div><!-- End .custom-checkbox -->
                                     </div><!-- End .form-footer -->
                                 </form>
-                                <div class="form-choice">
-                                    <p class="text-center">or sign in with</p>
-                                    <div class="row">
-                                        <div class="col-sm-6">
-                                            <a href="#" class="btn btn-login btn-g">
-                                                <i class="icon-google"></i>
-                                                Login With Google
-                                            </a>
-                                        </div><!-- End .col-6 -->
-                                        <div class="col-sm-6">
-                                            <a href="#" class="btn btn-login  btn-f">
-                                                <i class="icon-facebook-f"></i>
-                                                Login With Facebook
-                                            </a>
-                                        </div><!-- End .col-6 -->
-                                    </div><!-- End .row -->
-                                </div><!-- End .form-choice -->
+                              
                             </div><!-- .End .tab-pane -->
                         </div><!-- End .tab-content -->
                     </div><!-- End .form-tab -->
