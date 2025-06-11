@@ -12,9 +12,6 @@
                 <img src="{{ $secondImage ? asset('public/assets/images/demos/demo-2/products/' . $secondImage->path) : asset('no-image.jpg') }}"
                      alt="{{ $product->name }}" class="product-image-hover">
             </a>
-            <div class="product-action-vertical">
-                <a href="#" class="btn-product-icon btn-wishlist"><span>add to wishlist</span></a>
-            </div>
         </figure>
         <div class="product-body">
             <h3 class="product-title">
@@ -23,7 +20,7 @@
             <div class="product-price">${{ $product->price }}</div>
         </div>
         <div class="product-action">
-            <a href="{{ route('cart.add', $product->id) }}" class="btn-product btn-cart"><span>add to cart</span></a>
+            <a href="{{ route('order.add', $product->id) }}" class="btn-product btn-cart"><span>Order Now</span></a>
         </div>
     </div>
 </div>

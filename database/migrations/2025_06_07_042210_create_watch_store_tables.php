@@ -38,24 +38,10 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        Schema::create('brands', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->string('logo')->nullable();
-            $table->timestamps();
-        });
-
-        Schema::create('categories', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->string('slug')->unique();
-            $table->timestamps();
-        });
+    
 
         Schema::create('products', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('brand_id')->constrained();
-            $table->foreignId('category_id')->constrained();
             $table->string('name');
             $table->string('slug')->unique();
             $table->text('description')->nullable();
@@ -63,17 +49,6 @@ return new class extends Migration
             $table->decimal('sale_price', 10, 2)->nullable();
             $table->integer('stock')->default(0);
             $table->integer('warranty_years')->nullable();
-            $table->timestamps();
-        });
-
-        Schema::create('product_variants', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('product_id')->constrained();
-            $table->string('color')->nullable();
-            $table->string('strap_material')->nullable();
-            $table->float('size_diameter')->nullable();
-            $table->decimal('price', 10, 2)->nullable();
-            $table->integer('stock')->default(0);
             $table->timestamps();
         });
 
@@ -104,16 +79,7 @@ return new class extends Migration
             $table->decimal('price', 10, 2);
             $table->timestamps();
         });
-
-        Schema::create('reviews', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('product_id')->constrained();
-            $table->foreignId('user_id')->constrained();
-            $table->tinyInteger('rating');
-            $table->text('comment')->nullable();
-            $table->timestamps();
-        });
-
+   
         Schema::create('inventory_logs', function (Blueprint $table) {
             $table->id();
             $table->foreignId('product_id')->constrained();
@@ -132,23 +98,6 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        Schema::create('related_products', function (Blueprint $table) {
-            $table->unsignedBigInteger('product_id');
-            $table->unsignedBigInteger('related_product_id');
-            $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
-            $table->foreign('related_product_id')->references('id')->on('products')->onDelete('cascade');
-        });
-
-        Schema::create('cart_items', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('product_id');
-            $table->integer('quantity')->default(1);
-            $table->timestamps();
-
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
-        });
 
     }
 
@@ -156,19 +105,13 @@ return new class extends Migration
     {
         Schema::dropIfExists('return_requests');
         Schema::dropIfExists('inventory_logs');
-        Schema::dropIfExists('reviews');
         Schema::dropIfExists('order_items');
         Schema::dropIfExists('orders');
         Schema::dropIfExists('product_images');
-        Schema::dropIfExists('product_variants');
         Schema::dropIfExists('products');
-        Schema::dropIfExists('categories');
-        Schema::dropIfExists('brands');
         Schema::dropIfExists('addresses');
         Schema::dropIfExists('admins');
         Schema::dropIfExists('users');
-        Schema::dropIfExists('related_products');
-        Schema::dropIfExists('cart_items');
     }
    
 

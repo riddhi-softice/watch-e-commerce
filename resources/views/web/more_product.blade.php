@@ -7,46 +7,53 @@
 
 <div class="container">
 
-    <div class="heading heading-center mb-6">
-       
-        <ul class="nav nav-pills nav-border-anim justify-content-center" role="tablist">
-            <li class="nav-item">
-                <a class="nav-link active" id="top-all-link" data-toggle="tab" href="#top-all-tab" role="tab"
-                    aria-controls="top-all-tab" aria-selected="true">All</a>
-            </li>
-            @foreach ($data['categories'] as $category)
-            <li class="nav-item">
-                <a class="nav-link" id="top-{{ $category->id }}-link" data-toggle="tab"
-                    href="#top-{{ $category->id }}-tab" role="tab" aria-controls="top-{{ $category->id }}-tab"
-                    aria-selected="false">{{ $category->name }}</a>
-            </li>
-            @endforeach
-        </ul>
-    </div>
-    <!-- End .heading -->
-
     <div class="tab-content">
         <!-- All Products Tab -->
         <div class="tab-pane fade show active" id="top-all-tab" role="tabpanel" aria-labelledby="top-all-link">
             <div class="row justify-content-center">
                 @foreach ($data['all_products'] as $product)
-                @include('web.partials.product-card', ['product' => $product])
-                @endforeach
-            </div>
-        </div>
-
-        <!-- Category Specific Tabs -->
-        @foreach ($data['categories'] as $category)
-        <div class="tab-pane fade" id="top-{{ $category->id }}-tab" role="tabpanel"aria-labelledby="top-{{ $category->id }}-link">
-            <div class="row justify-content-center">
-                @foreach ($category->products as $product)
                     @include('web.partials.product-card', ['product' => $product])
                 @endforeach
-            </div>
+            </div>           
         </div>
-        @endforeach
+        
+<nav aria-label="Page navigation">
+    @php
+        $paginator = $data['all_products'];
+    @endphp
+
+    @if ($paginator->lastPage() > 1)
+        <ul class="pagination justify-content-center">
+            {{-- Previous Page Link --}}
+            <li class="page-item {{ $paginator->onFirstPage() ? 'disabled' : '' }}">
+                <a class="page-link page-link-prev" href="{{ $paginator->previousPageUrl() ?? '#' }}" aria-label="Previous">
+                    <span aria-hidden="true"><i class="icon-long-arrow-left"></i></span>Prev
+                </a>
+            </li>
+
+            {{-- Page Number Links --}}
+            @for ($i = 1; $i <= $paginator->lastPage(); $i++)
+                <li class="page-item {{ $paginator->currentPage() == $i ? 'active' : '' }}">
+                    <a class="page-link" href="{{ $paginator->url($i) }}">{{ $i }}</a>
+                </li>
+            @endfor
+
+            {{-- Total Page Display --}}
+            <li class="page-item-total">of {{ $paginator->lastPage() }}</li>
+
+            {{-- Next Page Link --}}
+            <li class="page-item {{ !$paginator->hasMorePages() ? 'disabled' : '' }}">
+                <a class="page-link page-link-next" href="{{ $paginator->nextPageUrl() ?? '#' }}" aria-label="Next">
+                    Next <span aria-hidden="true"><i class="icon-long-arrow-right"></i></span>
+                </a>
+            </li>
+        </ul>
+    @endif
+</nav>
+
+
     </div>
-    <!-- .End .tab-pane -->
+
 
 </div><!-- End .tab-content -->
 

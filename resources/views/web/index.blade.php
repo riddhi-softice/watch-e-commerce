@@ -125,29 +125,6 @@
             </div><!-- End .col-lg-4 -->
         </div><!-- End .row -->
 
-        <div class="mb-6"></div><!-- End .mb-6 -->
-
-        <div class="owl-carousel owl-simple" data-toggle="owl" data-owl-options='{
-                "nav": false, 
-                "dots": false,
-                "margin": 30,
-                "loop": false,
-                "responsive": {
-                    "0": {"items": 2},
-                    "420": {"items": 3},
-                    "600": {"items": 4},
-                    "900": {"items": 5},
-                    "1024": {"items": 6}
-                }
-            }'>
-
-            @foreach ($data['brands'] as $brand)
-            <a href="#" class="brand">
-                <img src="{{ asset('public/assets/images/brands/' . $brand->logo) }}" alt="{{ $brand->name }}">
-            </a>
-            @endforeach
-        </div><!-- End .owl-carousel -->
-
     </div><!-- End .container -->
 </div><!-- End .bg-lighter -->
 
@@ -159,19 +136,6 @@
 
     <div class="heading heading-center mb-6">
         <h2 class="title">Recent Arrivals</h2>
-        <ul class="nav nav-pills nav-border-anim justify-content-center" role="tablist">
-            <li class="nav-item">
-                <a class="nav-link active" id="top-all-link" data-toggle="tab" href="#top-all-tab" role="tab"
-                    aria-controls="top-all-tab" aria-selected="true">All</a>
-            </li>
-            @foreach ($data['categories'] as $category)
-            <li class="nav-item">
-                <a class="nav-link" id="top-{{ $category->id }}-link" data-toggle="tab"
-                    href="#top-{{ $category->id }}-tab" role="tab" aria-controls="top-{{ $category->id }}-tab"
-                    aria-selected="false">{{ $category->name }}</a>
-            </li>
-            @endforeach
-        </ul>
     </div>
     <!-- End .heading -->
 
@@ -184,17 +148,6 @@
                 @endforeach
             </div>
         </div>
-
-        <!-- Category Specific Tabs -->
-        @foreach ($data['categories'] as $category)
-        <div class="tab-pane fade" id="top-{{ $category->id }}-tab" role="tabpanel"aria-labelledby="top-{{ $category->id }}-link">
-            <div class="row justify-content-center">
-                @foreach ($category->products as $product)
-                    @include('web.partials.product-card', ['product' => $product])
-                @endforeach
-            </div>
-        </div>
-        @endforeach
     </div>
     <!-- .End .tab-pane -->
 
@@ -246,108 +199,6 @@
 
     <div class="mb-2"></div><!-- End .mb-2 -->
 </div><!-- End .container -->
-
-<div class="blog-posts pt-7 pb-7" style="background-color: #fafafa;">
-    <div class="container">
-        <h2 class="title-lg text-center mb-3 mb-md-4">From Our Blog</h2><!-- End .title-lg text-center -->
-
-        <div class="owl-carousel owl-simple carousel-with-shadow" data-toggle="owl" data-owl-options='{
-                            "nav": false, 
-                            "dots": true,
-                            "items": 3,
-                            "margin": 20,
-                            "loop": false,
-                            "responsive": {
-                                "0": {
-                                    "items":1
-                                },
-                                "600": {
-                                    "items":2
-                                },
-                                "992": {
-                                    "items":3
-                                }
-                            }
-                        }'>
-            <article class="entry entry-display">
-                <figure class="entry-media">
-                    <a href="single.html">
-                        <img src="{{ asset('public/assets/images/blog/home/post-1.jpg') }}" alt="image desc">
-                    </a>
-                </figure><!-- End .entry-media -->
-
-                <div class="entry-body pb-4 text-center">
-                    <div class="entry-meta">
-                        <a href="#">Nov 22, 2018</a>, 0 Comments
-                    </div><!-- End .entry-meta -->
-
-                    <h3 class="entry-title">
-                        <a href="single.html">Sed adipiscing ornare.</a>
-                    </h3><!-- End .entry-title -->
-
-                    <div class="entry-content">
-                        <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Phasellus hendrerit.<br>Pelletesque
-                            aliquet nibh necurna. </p>
-                        <a href="single.html" class="read-more">Read More</a>
-                    </div><!-- End .entry-content -->
-                </div><!-- End .entry-body -->
-            </article><!-- End .entry -->
-
-            <article class="entry entry-display">
-                <figure class="entry-media">
-                    <a href="single.html">
-                        <img src="{{ asset('public/assets/images/blog/home/post-2.jpg') }}" alt="image desc">
-                    </a>
-                </figure><!-- End .entry-media -->
-
-                <div class="entry-body pb-4 text-center">
-                    <div class="entry-meta">
-                        <a href="#">Dec 12, 2018</a>, 0 Comments
-                    </div><!-- End .entry-meta -->
-
-                    <h3 class="entry-title">
-                        <a href="single.html">Fusce lacinia arcuet nulla.</a>
-                    </h3><!-- End .entry-title -->
-
-                    <div class="entry-content">
-                        <p>Sed pretium, ligula sollicitudin laoreet<br>viverra, tortor libero sodales leo, eget blandit
-                            nunc tortor eu nibh. Nullam mollis justo. </p>
-                        <a href="single.html" class="read-more">Read More</a>
-                    </div><!-- End .entry-content -->
-                </div><!-- End .entry-body -->
-            </article><!-- End .entry -->
-
-            <article class="entry entry-display">
-                <figure class="entry-media">
-                    <a href="single.html">
-                        <img src="{{ asset('public/assets/images/blog/home/post-3.jpg') }}" alt="image desc">
-                    </a>
-                </figure><!-- End .entry-media -->
-
-                <div class="entry-body pb-4 text-center">
-                    <div class="entry-meta">
-                        <a href="#">Dec 19, 2018</a>, 2 Comments
-                    </div><!-- End .entry-meta -->
-
-                    <h3 class="entry-title">
-                        <a href="single.html">Quisque volutpat mattis eros.</a>
-                    </h3><!-- End .entry-title -->
-
-                    <div class="entry-content">
-                        <p>Suspendisse potenti. Sed egestas, ante et vulputate volutpat, eros pede semper est, vitae
-                            luctus metus libero eu augue. </p>
-                        <a href="single.html" class="read-more">Read More</a>
-                    </div><!-- End .entry-content -->
-                </div><!-- End .entry-body -->
-            </article><!-- End .entry -->
-        </div><!-- End .owl-carousel -->
-    </div><!-- container -->
-
-    <div class="more-container text-center mb-0 mt-3">
-        <a href="blog.html" class="btn btn-outline-darker btn-more"><span>View more articles</span><i
-                class="icon-long-arrow-right"></i></a>
-    </div><!-- End .more-container -->
-</div>
 
 <div class="cta cta-display bg-image pt-4 pb-4" style="background-image: url({{ asset('public/assets/images/backgrounds/cta/bg-6.jpg);">
     <div class="container">
