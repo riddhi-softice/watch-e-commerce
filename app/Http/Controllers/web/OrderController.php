@@ -5,48 +5,72 @@ namespace App\Http\Controllers\web;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Product;
-use DB;
-use Illuminate\Support\Facades\Auth;
+use App\Models\User;
+use App\Models\Address;
+use App\Models\Orders;
 
 class OrderController extends Controller
 {
-    public function showCart()
-    {
-        $uid = auth()->id();
-        $cartItems = CartItem::with('product.firstImage')->where('user_id', $uid)->get();
-
-        $subtotal = $cartItems->sum(function ($item) {
-            return $item->product->price * $item->quantity;
-        });
-        return view('web.product_cart', compact('cartItems', 'subtotal'));
-    }
-    
     public function addOrder(Request $request, $productId)
     {
         $uid = auth()->id();
-        $product = Product::with(['images'])->findOrFail($productId);
-        return view('web.order.add_order', compact('product'));
+        $data['user_details'] = User::with('address')->where('id',$uid)->first();
+        $data['product_details'] = Product::where('id',$productId)->select('id','name','price')->first();
+        
+        return view('web.order.add_order', compact('data'));
     }
 
-    public function updateCart(Request $request)
+    public function placeOrder(Request $request)  
     {
+        // dd($request->all());
         $uid = auth()->id();
-        foreach ($request->quantities as $id => $qty) {
-            CartItem::where('id', $id)->where('user_id',$uid)->update(['quantity' => max(1, (int)$qty)]);
+        $user = User::where('id',$uid)->first();
+        if (!is_null($user)) {
+           
+            $input = [
+                'name' => $request->name,
+                'last_name' => $request->last_name,
+                'phone' => $request->phone,
+            ];
+            $user->update($input);
         }
-        return response()->json(['success' => true, 'message' => 'Cart updated successfully.']);
-        // return redirect()->back()->with('success', 'Cart updated successfully.');
+       
+        $input1= [
+            'street' => $request->street,
+            'city' => $request->city,
+            'state' => $request->state,
+            'country' => $request->country,
+            'postal_code' => $request->postal_code,
+        ];
+        $address = Address::where('user_id',$uid)->first();
+        if (!is_null($address)) {
+            $address->update($input1);
+        }else {
+            $input1['user_id'] = $uid;
+             Address::create($input1);
+        }
+
+        $product = Product::where('id',$request->product_id)->first();
+        if (!is_null($product)) {
+           
+            $input2 = [
+                'user_id' => $uid,
+                'product_id' => $request->product_id,
+                'total' => $request->total,
+                'payment_method' => "COD",
+                'order_note' => $request->order_note,
+            ];
+            Orders::create($input2);
+        }
+        return redirect('/')->with('success', 'Order successfully.');
     }
 
-    public function removeItem($id)
+    public function orderHistory(Request $request)
     {
         $uid = auth()->id();
-        $cartItem = CartItem::where('id', $id)->where('user_id', $uid)->first();
-        if ($cartItem) {
-            $cartItem->delete();
-            return redirect()->route('cart.index')->with('success', 'Item removed from cart.');
-        }
-        return redirect()->route('cart.index')->with('error', 'Item not found.');
+        $data['order_history'] = Orders::with(['product','product.firstImage'])->where('user_id',$uid)->latest()->get();
+        
+        return view('web.order.order_history', compact('data'));
     }
 
 }

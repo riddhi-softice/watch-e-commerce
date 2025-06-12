@@ -10,4 +10,10 @@ class User extends Authenticatable
 {
     use Notifiable;
     protected $guarded = [];
+
+    public function address()  // related product
+    {
+        return $this->hasOne(Address::class)->oldest(); // or ->orderBy('id')
+    }
+
 }

@@ -1,7 +1,9 @@
 @extends('web.layouts2.app')
 @section('content')
 
-<div class="page-header text-center" style="background-image: url('assets/images/page-header-bg.jpg')">
+<div class="page-header text-center"     
+     style="background-image: url('{{ asset('public/assets/images/page-header-bg.jpg') }}');">
+
     <div class="container">
         <h1 class="page-title">My Account<span>Shop</span></h1>
     </div><!-- End .container -->
@@ -10,12 +12,8 @@
 <nav aria-label="breadcrumb" class="breadcrumb-nav mb-3">
     <div class="container">
         <ol class="breadcrumb">
-            <!-- <li>View your <strong><a href="{{ route('orders.index') }}">recent orders</a></strong></li>
-            <li>Manage your <strong><a href="{{ route('addresses.index') }}">shipping and billing addresses</a></strong></li>
-            <li>Edit your <strong><a  href="#tab-account" class="tab-trigger-link">password and account details</a></strong></li> -->
-
-            <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-            <li class="breadcrumb-item"><a href="#">Shop</a></li>
+             <li class="breadcrumb-item"><a href="{{ url('/') }}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{{ url('more-products') }}">Shop</a></li>
             <li class="breadcrumb-item active" aria-current="page">My Account</li>
         </ol>
     </div><!-- End .container -->
@@ -77,26 +75,18 @@
                                 <div class="col-lg-6">
                                     <div class="card card-dashboard">
                                         <div class="card-body">
-                                            <h3 class="card-title">Billing Address</h3><!-- End .card-title -->
+                                            <h3 class="card-title">Shipping Address</h3>
 
-                                            <p>User Name<br>
-                                            User Company<br>
-                                            John str<br>    
-                                            New York, NY 10001<br>
-                                            1-234-987-6543<br>
-                                            yourmail@mail.com<br>
-                                            <a href="#">Edit <i class="icon-edit"></i></a></p>
-                                        </div><!-- End .card-body -->
-                                    </div><!-- End .card-dashboard -->
-                                </div><!-- End .col-lg-6 -->
-
-                                <div class="col-lg-6">
-                                    <div class="card card-dashboard">
-                                        <div class="card-body">
-                                            <h3 class="card-title">Shipping Address</h3><!-- End .card-title -->
-
-                                            <p>You have not set up this type of address yet.<br>
-                                            <a href="#">Edit <i class="icon-edit"></i></a></p>
+                                            <p>{{ $data['user_details']['name'] }}<br>
+                                            @if($data['user_details']['address'])
+                                           {{$data['user_details']['address']['street'] ?? ''}}<br>    
+                                           {{$data['user_details']['address']['city'] ?? ''}},{{$data['user_details']['address']['state'] ?? ''}}<br>
+                                           {{$data['user_details']['address']['country'] ?? ''}},{{$data['user_details']['address']['postal_code'] ?? ''}}<br>
+                                           @endif
+                                           {{ $data['user_details']['phone'] }}<br>
+                                           {{ $data['user_details']['email'] }}<br>
+                                            <!-- <a href="#">Edit <i class="icon-edit"></i></a> -->
+                                        </p>
                                         </div><!-- End .card-body -->
                                     </div><!-- End .card-dashboard -->
                                 </div><!-- End .col-lg-6 -->

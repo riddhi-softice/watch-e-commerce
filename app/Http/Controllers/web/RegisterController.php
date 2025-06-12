@@ -12,9 +12,15 @@ class RegisterController extends Controller
 {
     public function register(Request $request)
     {
-        $request->validate([
-            'email' => 'required|email|unique:users,email',
+         $request->validate([
+           'email' => 'required|email|unique:users,email',
             'password' => 'required|min:6',
+        ], [
+            'email.required' => 'Please enter your email address.',
+            'email.email' => 'The email format is invalid.',
+            'email.unique' => 'This email is already registered.',
+            'password.required' => 'Please enter a password.',
+            'password.min' => 'Password must be at least 6 characters.',
         ]);
 
         $user = User::create([
@@ -23,14 +29,27 @@ class RegisterController extends Controller
         ]);
         // session(['user_id' => $user->id]);
         Auth::login($user);  // Set authenticated session
-        
-        return redirect()->back()->with('success', 'Registration successful!');
+
+        return redirect('user/dashboard')->with('success', 'Registration successfully.');
+        // return redirect()->back()->with('success', 'Registration successful!');
     }
 
     public function login(Request $request)
     {
-        $credentials = $request->only('email', 'password');
-        $remember = $request->has('remember');
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
+
+        // Check if user exists
+        $user = User::where('email', $request->email)->first();
+        if (!$user) {
+            return back()->with('login-error', 'Email not registered.')->withInput();
+        }
+            
+        
+        // $credentials = $request->only('email', 'password');
+        // $remember = $request->has('remember');
 
         // dd([
         //     'credentials' => $request->only('email', 'password'),
@@ -39,11 +58,14 @@ class RegisterController extends Controller
         //     'login_result' => Auth::attempt($request->only('email', 'password'))
         // ]);
 
-        if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
-            // session(['user_id' => $user->id]);
-            return redirect()->back()->with('success', 'Login successful!');
+         // Check password
+        if (!Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
+            return back()->with('login-error', 'Incorrect password.')->withInput();
         }
-        return back()->withErrors(['email' => 'Invalid credentials.'])->withInput();
+
+        // Successful login
+        return redirect('user/dashboard')->with('success', 'Login successfully.');
+        // return redirect()->back()->with('success', 'Login successful!');
     }
 
     public function logout()

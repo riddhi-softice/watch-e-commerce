@@ -6,6 +6,11 @@ use App\Http\Controllers\web\OrderController;
 use App\Http\Controllers\web\CartController;
 use App\Http\Controllers\web\RegisterController;
 use App\Http\Controllers\web\AccountController;
+use App\Http\Controllers\web\RazorpayPaymentController;
+
+use App\Http\Controllers\Admin\AuthController;
+use App\Http\Controllers\Admin\TwoFactorAuthController;
+use App\Http\Controllers\Admin\UserController;
 
 Route::get('test', function () {
     return view('web.12');
@@ -33,48 +38,67 @@ Route::get('contact-us', function () {
         Route::get('more-products','more_product')->name('product.more');
 
         Route::get('product/show/{id}','details_page')->name('product.show');
-        Route::get('/category/{slug}', 'show')->name('category.products');  // details page  // remove
-
-        Route::get('/orders/index', 'show')->name('orders.index');  // order page 
-    });   
-
-    // Route::middleware(['auth'])->group(function () {
-
-    //     Route::controller(CartController::class)->group(function () { // remove
-
-    //         Route::get('addCart/{id}','addToCart')->name('cart.add');
-    //         Route::get('product/cart','showCart')->name('cart.index');
-    //         Route::delete('/cart/{id}','removeItem')->name('cart.remove');
-    //         Route::post('cart/update', 'updateCart')->name('cart.update');
-
-    //         // Route::post('orders', 'orders')->name('orders.index');
-    //         Route::post('addresses', 'addresses')->name('addresses.index');
-    //     });
        
-    // });
+    });   
 
     Route::middleware(['auth'])->group(function () {
 
-        Route::controller(OrderController::class)->group(function () { // remove
-
+        Route::controller(OrderController::class)->group(function () { 
             Route::get('addOrder/{id}','addOrder')->name('order.add');
-            Route::get('product/cart','showCart')->name('cart.index');
-            Route::delete('/cart/{id}','removeItem')->name('cart.remove');
-            Route::post('cart/update', 'updateCart')->name('cart.update');
-
-            Route::post('addresses', 'addresses')->name('addresses.index');
+            Route::post('place/order','placeOrder')->name('order.place');
+            
+            Route::get('orders/history', 'orderHistory')->name('orders.history');  // order page 
         });
-       
+
         Route::controller(AccountController::class)->group(function () {
 
             Route::get('user/dashboard','dashboard')->name('user.dashboard');
             Route::post('update/account','update_account')->name('update.account');
+
+            Route::get('/logout', 'logout')->name('user.logout');
         });
     });
 
     Route::controller(RegisterController::class)->group(function () {
+   
+        Route::get('sign-in', function () {
+            return view('web.sign-in');
+        })->name('sign-in');
 
         Route::post('/register', 'register')->name('user.register');
         Route::post('/login', 'login')->name('login');
-        Route::get('/logout', 'logout')->name('user.logout');
     });
+    
+Route::get('razorpay-payment', [RazorpayPaymentController::class, 'index']);
+Route::post('razorpay-payment', [RazorpayPaymentController::class, 'store'])->name('razorpay.payment.store');
+
+// ****************************************** ADMIN ROUTES ************************************************* //
+Route::prefix('admin')->group(function () {
+
+    Route::group(['middleware' => ['admin']], function() {
+        Route::get('2fa/setup', [TwoFactorAuthController::class, 'show2faForm'])->name('2fa.form');
+        Route::post('2fa/setup', [TwoFactorAuthController::class, 'setup2fa'])->name('2fa.setup');
+        Route::get('2fa/verify', [TwoFactorAuthController::class, 'showVerifyForm'])->name('2fa.verifyForm');
+        Route::post('2fa/verify', [TwoFactorAuthController::class, 'verify2fa'])->name('2fa.verify');
+    });
+
+    // Optional: Also prefix login routes if admin login is separate
+    Route::get('login', [AuthController::class, 'index'])->name('login');
+    Route::post('post-login', [AuthController::class, 'postLogin'])->name('login.post');
+
+    Route::middleware(['2fa','session.timeout','admin'])->group(function () {
+
+        Route::get('dashboard', [AuthController::class, 'dashboard'])->name('dashboard');
+        Route::get('account_setting', [AuthController::class, 'account_setting'])->name('account_setting');
+        Route::post('account_setting_change', [AuthController::class, 'account_setting_change'])->name('post.account_setting');
+        Route::get('logout', [AuthController::class, 'logout'])->name('logout');
+        
+        Route::resource('images', ImageController::class);
+        Route::post('image_delete/{id}', [ImageController::class, 'image_delete'])->name('image_delete');
+
+        Route::resource('users', UserController::class);
+        Route::get('get_purchase_list', [UserController::class, 'get_purchase_list'])->name('get_purchase_list');
+
+    });
+
+});

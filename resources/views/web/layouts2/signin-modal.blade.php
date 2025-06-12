@@ -24,9 +24,22 @@
                             <div class="tab-pane fade show active" id="signin" role="tabpanel" aria-labelledby="signin-tab">
                                 <form action="{{ route('login') }}" method="POST">
                                     @csrf
+
+                                    @if(session('login-error'))
+                                        <div class="alert alert-danger">
+                                            {{ session('login-error') }}
+                                        </div>
+                                    @endif
+
+                                    @if(session('success'))
+                                        <div class="alert alert-success">
+                                            {{ session('success') }}
+                                        </div>
+                                    @endif
+                                       
                                     <div class="form-group">
-                                        <label for="singin-email">Username or email address *</label>
-                                        <input type="text" class="form-control" id="singin-email" name="email" required>
+                                        <label for="singin-email"> Email address *</label>
+                                        <input type="email" class="form-control" id="singin-email" name="email" required>
                                     </div><!-- End .form-group -->
 
                                     <div class="form-group">
@@ -89,3 +102,6 @@
         </div><!-- End .modal-content -->
     </div><!-- End .modal-dialog -->
 </div><!-- End .modal -->
+
+
+

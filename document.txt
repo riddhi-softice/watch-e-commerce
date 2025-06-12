@@ -1,2 +1,6 @@
 
 1) .env  and config/app.php files project path set
+
+2) composer require razorpay/razorpay 
+
+3) composer require yajra/laravel-datatables-oracle 

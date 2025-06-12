@@ -13,7 +13,7 @@ class AccountController extends Controller
     public function dashboard()  
     {
         $uid = auth()->id();
-        $data['user_details'] = User::where('id',$uid)->first();
+        $data['user_details'] = User::with('address')->where('id',$uid)->first();
 
         return view('web.dashboard', compact('data'));
     }

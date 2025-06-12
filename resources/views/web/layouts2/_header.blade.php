@@ -20,7 +20,7 @@
                             <a href="{{ url('more-products') }}" class="goto-demos">Shop</a>
                         </li>
                         <li class="{{ Request::is('orders/index') ? 'active' : '' }}">
-                            <a href="{{ url('/orders/index') }}" class="goto-demos">My Orders</a>
+                            <a href="{{ url('orders/history') }}" class="goto-demos">My Orders</a>
                         </li>
                     </ul>
                 </nav>
