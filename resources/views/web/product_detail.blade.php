@@ -8,7 +8,7 @@
             <li class="breadcrumb-item"><a href="{{ url('more-products') }}">Products</a></li>
             <li class="breadcrumb-item active" aria-current="page">{{ $product->name }}</li>
         </ol>
-        
+
     </div><!-- End .container -->
 </nav><!-- End .breadcrumb-nav -->
 
@@ -20,50 +20,51 @@
                 <div class="col-md-6">
                     <div class="product-gallery product-gallery-vertical">
                         <div class="row">
-                           
+
                             {{-- MAIN IMAGE --}}
-                                @php
-                                    $primaryImage = $product->images->firstWhere('is_primary', 1) ?? $product->images->first();
-                                @endphp
+                            @php
+                                $primaryImage = $product->images->firstWhere('is_primary', 1) ?? $product->images->first();
+                            @endphp
 
-                                @if ($primaryImage)
-                                <figure class="product-main-image">
-                                    <img id="product-zoom"
-                                        src="{{ asset('public/assets/images/products/' . $primaryImage->path) }}"
-                                        data-zoom-image="{{ asset('public/assets/images/products/' . $primaryImage->path) }}"
-                                        alt="Main product image">
+                            @if ($primaryImage)
+                            <figure class="product-main-image">
+                                <img id="product-zoom"
+                                    src="{{ asset('public/assets/images/products/' . $primaryImage->path) }}"
+                                    data-zoom-image="{{ asset('public/assets/images/products/' . $primaryImage->path) }}"
+                                    alt="Main product image">
 
-                                    <a href="#" id="btn-product-gallery" class="btn-product-gallery">
-                                        <i class="icon-arrows"></i>
-                                    </a>
-                                </figure>
-                                @endif
+                                <a href="#" id="btn-product-gallery" class="btn-product-gallery">
+                                    <i class="icon-arrows"></i>
+                                </a>
+                            </figure>
+                            @endif
 
-                                {{-- GALLERY --}}
-                                <div id="product-zoom-gallery" class="product-image-gallery">
-                                    @foreach ($product->images as $image)
-                                        <a class="product-gallery-item {{ $loop->first ? 'active' : '' }}" href="#"
-                                        data-image="{{ asset('public/assets/images/products/' . $image->path) }}"
-                                        data-zoom-image="{{ asset('public/assets/images/products/' . $image->path) }}">
-                                            <img src="{{ asset('public/assets/images/products/' . $image->path) }}" alt="product image">
-                                        </a>
-                                    @endforeach
-                                </div>
+                            {{-- GALLERY --}}
+                            <div id="product-zoom-gallery" class="product-image-gallery">
+                                @foreach ($product->images as $image)
+                                <a class="product-gallery-item {{ $loop->first ? 'active' : '' }}" href="#"
+                                    data-image="{{ asset('public/assets/images/products/' . $image->path) }}"
+                                    data-zoom-image="{{ asset('public/assets/images/products/' . $image->path) }}">
+                                    <img src="{{ asset('public/assets/images/products/' . $image->path) }}"
+                                        alt="product image">
+                                </a>
+                                @endforeach
+                            </div>
 
-                        </div><!-- End .row -->
-                    </div><!-- End .product-gallery -->
-                </div><!-- End .col-md-6 -->
+                        </div>
+                    </div>
+                </div>
 
                 <div class="col-md-6">
                     <div class="product-details">
-                       <h1 class="product-title">{{ $product->name }}</h1><!-- End .product-title -->
+                        <h1 class="product-title">{{ $product->name }}</h1><!-- End .product-title -->
 
-                       <div class="product-price">
+                        <div class="product-price">
                             <span style="color: red; text-decoration: line-through;">
                                 ₹{{ number_format($product->reseller_price, 2) }}
                             </span>
                         </div><!-- End .product-price -->
-                     
+
                         <div class="product-price">
                             ₹{{ number_format($product->price, 2) }}
                         </div><!-- End .product-price -->
@@ -75,7 +76,7 @@
                         <div class="product-details-action">
                             <a href="#" class="btn-product btn-cart"><span>Order Now</span></a>
                         </div><!-- End .product-details-action -->
-                        
+
                         <div class="product-details-footer">
                             <div class="social-icons social-icons-sm">
                                 <span class="social-label">Share:</span>
@@ -111,7 +112,7 @@
                     <a class="nav-link" id="product-shipping-link" data-toggle="tab" href="#product-shipping-tab"
                         role="tab" aria-controls="product-shipping-tab" aria-selected="false">Shipping & Returns</a>
                 </li>
-               
+
             </ul>
             <div class="tab-content">
                 <div class="tab-pane fade show active" id="product-desc-tab" role="tabpanel"
@@ -131,7 +132,7 @@
                         {!! $product->shipping_info !!}
                     </div><!-- End .product-desc-content -->
                 </div><!-- .End .tab-pane -->
- 
+
             </div><!-- End .tab-content -->
         </div><!-- End .product-details-tab -->
 

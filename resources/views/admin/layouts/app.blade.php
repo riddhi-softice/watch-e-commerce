@@ -41,7 +41,7 @@
         <div class="d-flex align-items-center justify-content-between">
             <a href="#" class="logo d-flex align-items-center">
                 {{-- <img src="{{ asset('public/admin/assets/img/logo.png') }}" alt=""> --}}
-                <span class="d-none d-lg-block">VIDEO-THUMBNAIL</span>
+                <span class="d-none d-lg-block">E-COMMERCE</span>
             </a>
             <i class="bi bi-list toggle-sidebar-btn"></i>
         </div>

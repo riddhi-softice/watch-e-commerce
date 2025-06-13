@@ -24,8 +24,8 @@
                          <ul class="widget-list">
                              <li><a href="{{ url('/about') }}">About Us</a></li>
                              <li><a href="{{ url('/terms-and-conditions') }}">Terms & Conditions</a></li>
-                             <li><a href="{{ url('/shipping-delivery-policy') }}">Shipping & Delivery Policy</a></li>
-                             <li><a href="{{ url('/cancellation-refund-policy') }}">Cancellation & Refund Policy</a></li>
+                             <!-- <li><a href="{{ url('/shipping-delivery-policy') }}">Shipping & Delivery Policy</a></li> -->
+                             <!-- <li><a href="{{ url('/cancellation-refund-policy') }}">Cancellation & Refund Policy</a></li> -->
                              <li><a href="{{ url('/contact-us') }}">Contact Us</a></li>
                          </ul>
                      </div>

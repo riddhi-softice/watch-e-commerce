@@ -6,22 +6,21 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\ImageModel;
 use App\Models\VideoModel;
-// use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Storage;
 use GuzzleHttp\Client;
 
-class ImageController extends Controller
+class ProductController extends Controller
 {
     public function index()
     {
-        // $images = ImageModel::orderBy('id','desc')->get();
-        $images = ImageModel::withCount('videos')->orderBy('id', 'desc')->get();
-        return view('images.index', compact('images'));
+        // $products = ImageModel::orderBy('id','desc')->get();
+        $products = ImageModel::withCount('videos')->orderBy('id', 'desc')->get();
+        return view('products.index', compact('products'));
     }
 
     public function create()
     {
-        return view('images.create');
+        return view('products.create');
     }
 
     public function store(Request $request)
@@ -36,17 +35,16 @@ class ImageController extends Controller
         $input['img_url'] = $imageName;
         $Image = ImageModel::create($input);
 
-        return redirect()->route('images.index')->with('success', 'Image created successfully.');
+        return redirect()->route('products.index')->with('success', 'Image created successfully.');
     }
 
     public function edit(ImageModel $Image)
     {
-        return view('images.edit', compact('Image'));
+        return view('products.edit', compact('Image'));
     }
 
     public function update(Request $request, ImageModel $Image)
     {
-      
         if ($request->hasFile('img_url')) {
             $this->deleteImage($Image->img_url);
             $image = $request->file('img_url');
@@ -56,7 +54,7 @@ class ImageController extends Controller
         }
         $Image->update($input);
 
-        return redirect()->route('images.index')->with('success', 'Image updated successfully.');
+        return redirect()->route('products.index')->with('success', 'Image updated successfully.');
     }
 
     public function image_delete($id)
@@ -72,7 +70,7 @@ class ImageController extends Controller
         }
 
         $Image->delete();
-        return redirect()->route('images.index')->with('success', 'Image deleted successfully.');
+        return redirect()->route('products.index')->with('success', 'Image deleted successfully.');
     }
 
     protected function deleteImage($filename)

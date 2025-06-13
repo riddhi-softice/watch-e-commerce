@@ -11,6 +11,7 @@ use App\Http\Controllers\web\RazorpayPaymentController;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\TwoFactorAuthController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\ProductController as admin_product;
 
 Route::get('test', function () {
     return view('web.12');
@@ -30,6 +31,9 @@ Route::get('cancellation-refund-policy', function () {
 });
 Route::get('contact-us', function () {
     return view('web.pages.contact-us');
+});
+Route::get('privacypolicy', function () {
+    return view('web.pages.privacypolicy');
 });
 
     Route::controller(ProductController::class)->group(function () {
@@ -83,7 +87,7 @@ Route::prefix('admin')->group(function () {
     });
 
     // Optional: Also prefix login routes if admin login is separate
-    Route::get('login', [AuthController::class, 'index'])->name('login');
+    Route::get('login', [AuthController::class, 'index'])->name('admin.login');
     Route::post('post-login', [AuthController::class, 'postLogin'])->name('login.post');
 
     Route::middleware(['2fa','session.timeout','admin'])->group(function () {
@@ -93,11 +97,10 @@ Route::prefix('admin')->group(function () {
         Route::post('account_setting_change', [AuthController::class, 'account_setting_change'])->name('post.account_setting');
         Route::get('logout', [AuthController::class, 'logout'])->name('logout');
         
-        Route::resource('images', ImageController::class);
-        Route::post('image_delete/{id}', [ImageController::class, 'image_delete'])->name('image_delete');
+        Route::resource('products', admin_product::class);
 
         Route::resource('users', UserController::class);
-        Route::get('get_purchase_list', [UserController::class, 'get_purchase_list'])->name('get_purchase_list');
+        Route::get('get_order_list', [UserController::class, 'get_order_list'])->name('get_order_list');
 
     });
 

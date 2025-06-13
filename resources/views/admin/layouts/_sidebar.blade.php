@@ -10,12 +10,25 @@
         </li>
 
         <li class="nav-item">
-            <a class="nav-link {{ request()->routeIs('images.index') ? '' : 'collapsed' }}" href="{{ route('images.index') }}">
+            <a class="nav-link {{ request()->routeIs('users.index') ? '' : 'collapsed' }}" href="{{ route('users.index') }}">
                 <i class="bi bi-person"></i>
-                <span>Images</span>
+                <span>Users</span>
+            </a>
+        </li>
+        
+        <li class="nav-item">
+            <a class="nav-link {{ request()->routeIs('products.index') ? '' : 'collapsed' }}" href="{{ route('products.index') }}">
+                <i class="bi bi-person"></i>
+                <span>Products</span>
             </a>
         </li>
        
-
+        <!-- <li class="nav-item">
+            <a class="nav-link {{ request()->routeIs('get_order_list') ? '' : 'collapsed' }}" href="{{ route('get_order_list') }}">
+                <i class="bi bi-person"></i>
+                <span>Orders</span>
+            </a>
+        </li> -->
+       
     </ul>
 </aside>
